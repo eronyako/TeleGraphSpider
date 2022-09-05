@@ -12,7 +12,11 @@
 
 ### url 列表文件要求
 
-url 列表文件需要使用 UTF-8 Without BOM 编码。
+url 列表文件需要使用 UTF-8 Without BOM 编码，一行一个网址，网址的形式如下:
+
+```
+https://telegra.ph/XXXXX
+```
 
 ### 使用源码
 
