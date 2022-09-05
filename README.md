@@ -10,7 +10,7 @@
 - 程序主体：TeleGraphSpider.py / TeleGraphSpider.exe
 - url 列表文件
 
-### 密码字典要求
+### url 列表文件要求
 
 url 列表文件需要使用 UTF-8 Without BOM 编码。
 
