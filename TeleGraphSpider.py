@@ -8,6 +8,7 @@
 import os
 import sys
 import re
+import json
 import requests
 from bs4 import BeautifulSoup
 from lxml import etree
@@ -87,6 +88,7 @@ def get_img(title: str, url_list: list, headers: dict, path: str):
         os.mkdir(os.path.join(path, title))
         # 通过 i 计数，使图片名称序列化
         i = 0
+        list_len = len(url_list)
         for v in url_list:
             i += 1
             # 取得图片内容
@@ -96,6 +98,7 @@ def get_img(title: str, url_list: list, headers: dict, path: str):
             # 写入硬盘
             with open(os.path.join(path, title, img_name), 'wb') as f:
                 f.write(img)
+            print(title, ': 已完成 [', i, '/', list_len, ']')
     else:
         # 若重名，则不保存
         print(f'文件夹已存在：{title}')
@@ -107,13 +110,20 @@ def main():
     if not os.path.exists(lib_path):
         os.mkdir(lib_path)
 
+    pic_urls_dict = dict()
     graph_list = get_graph_url()
     # 对每个 telegraph url 列表循环获取
     for v in graph_list:
         # 取得名字和图片列表
-        hon_name, img_list = get_pic_url_bs4(v, headers_def)
+        hon_name, img_list = get_pic_url_xp(v, headers_def)
+        pic_urls_dict[hon_name] = img_list
         # 获取图片
         get_img(hon_name, img_list, headers_def, lib_path)
+        print('已全部下载完成')
+
+    # 保存 url 数据为 json
+    with open(os.path.join(lib_path, 'pic_urls.json'), 'w', encoding='UTF-8') as f:
+        json.dump(pic_urls_dict, f, ensure_ascii=False, indent=4)
 
 
 if __name__ == '__main__':
