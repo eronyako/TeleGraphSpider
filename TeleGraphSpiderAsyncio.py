@@ -17,6 +17,7 @@ url_root = 'https://telegra.ph/'
 headers_def = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'}
 
 lib_dir = 'telegraph_lib'
+img_xpath = '//article[@id="_tl_editor"]//img/@src'
 
 pic_urls_dict = dict()
 
@@ -51,7 +52,7 @@ async def get_pic_url(url: str, headers: dict):
             # 取得文字时，可使用 'xpath/text()' 取得直系文本，使用 'xpath//text()' 取得所有文本
             title = res_tree.xpath('/html/body//main/header/h1/text()')[0]
             # 找到图片名称
-            url_list = res_tree.xpath('//article[@id="_tl_editor"]/img/@src')
+            url_list = res_tree.xpath(img_xpath)
             # 将名称加上前缀转为 url
             url_list = list(map(lambda i: url_root + i.strip('/'), url_list))
             return title, url_list

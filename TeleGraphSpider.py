@@ -16,7 +16,9 @@ from lxml import etree
 url_root = 'https://telegra.ph/'
 headers_def = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'}
 title_re = 'class="tl_article_content"><h1>(.*?)<br></h1><address>'
-img_re = '<img src="/(.*?)">'
+img_re = '<img src="(.*?)">'
+bs4_select = '#_tl_editor img'
+xp_xpath = '//article[@id="_tl_editor"]//img/@src'
 
 
 def get_graph_url():
@@ -48,7 +50,7 @@ def get_pic_url_re(url: str, headers: dict):
     # 找到图片名称
     url_list = re.findall(img_re, res, re.S)
     # 将名称加上前缀转为 url
-    url_list = list(map(lambda v: url_root + v, url_list))
+    url_list = list(map(lambda v: url_root + v.strip('/'), url_list))
     return title, url_list
 
 
@@ -59,7 +61,7 @@ def get_pic_url_bs4(url: str, headers: dict):
     # 取得标题
     title = res.select('.tl_article_header > h1')[0].text
     # 找到图片名称
-    url_list_soup = res.select('#_tl_editor > img')
+    url_list_soup = res.select(bs4_select)
     url_list = []
     for v in url_list_soup:
         url_list.append(v['src'].strip('/'))
@@ -76,7 +78,7 @@ def get_pic_url_xp(url: str, headers: dict):
     # 取得文字时，可使用 'xpath/text()' 取得直系文本，使用 'xpath//text()' 取得所有文本
     title = res.xpath('/html/body//main/header/h1/text()')[0]
     # 找到图片名称
-    url_list = res.xpath('//article[@id="_tl_editor"]/img/@src')
+    url_list = res.xpath(xp_xpath)
     # 将名称加上前缀转为 url
     url_list = list(map(lambda i: url_root + i.strip('/'), url_list))
     return title, url_list
@@ -115,7 +117,7 @@ def main():
     # 对每个 telegraph url 列表循环获取
     for v in graph_list:
         # 取得名字和图片列表
-        hon_name, img_list = get_pic_url_xp(v, headers_def)
+        hon_name, img_list = get_pic_url_re(v, headers_def)
         pic_urls_dict[hon_name] = img_list
         # 获取图片
         get_img(hon_name, img_list, headers_def, lib_path)
