@@ -22,7 +22,7 @@ img_xpath = '//article[@id="_tl_editor"]//img/@src'
 pic_urls_dict = dict()
 
 
-def get_graph_url():
+def get_graph_url() -> list[str]:
     # 取得 url 文件路径
     try:
         file_name = sys.argv[1]
@@ -43,7 +43,7 @@ def get_graph_url():
 
 
 # xPath 方式获取名称与图片链接
-async def get_pic_url(url: str, headers: dict):
+async def get_pic_url(url: str, headers: dict[str, str]) -> tuple[str, list[str]]:
     # 获取页面内容
     async with aiohttp.ClientSession() as session:
         async with await session.get(url=url, headers=headers) as res:
@@ -63,7 +63,7 @@ def get_pic_url_callback(task):
     print('地址获取完成：', task.result()[0])
 
 
-async def get_img(title: str, url_list: list, headers: dict, path: str):
+async def get_img(title: str, url_list: list[str], headers: dict[str, str], path: str):
     # 判断是否出现重名目录
     if not os.path.exists(os.path.join(path, title)):
         os.mkdir(os.path.join(path, title))

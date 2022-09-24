@@ -21,7 +21,7 @@ bs4_select = '#_tl_editor img'
 xp_xpath = '//article[@id="_tl_editor"]//img/@src'
 
 
-def get_graph_url():
+def get_graph_url() -> list[str]:
     # 取得 url 文件路径
     try:
         file_name = sys.argv[1]
@@ -42,7 +42,7 @@ def get_graph_url():
 
 
 # 正则式方式获取名称与图片链接
-def get_pic_url_re(url: str, headers: dict):
+def get_pic_url_re(url: str, headers: dict[str, str]) -> tuple[str, list[str]]:
     # 获取页面内容
     res = requests.get(url=url, headers=headers).text
     # 取得标题
@@ -55,7 +55,7 @@ def get_pic_url_re(url: str, headers: dict):
 
 
 # bs4 方式获取名称与图片链接
-def get_pic_url_bs4(url: str, headers: dict):
+def get_pic_url_bs4(url: str, headers: dict[str, str]) -> tuple[str, list[str]]:
     # 获取页面内容
     res = BeautifulSoup(requests.get(url=url, headers=headers).text, 'lxml')
     # 取得标题
@@ -71,7 +71,7 @@ def get_pic_url_bs4(url: str, headers: dict):
 
 
 # xPath 方式获取名称与图片链接
-def get_pic_url_xp(url: str, headers: dict):
+def get_pic_url_xp(url: str, headers: dict[str, str]) -> tuple[str, list[str]]:
     # 获取页面内容
     res = etree.HTML(requests.get(url=url, headers=headers).text)
     # 取得标题, '/'表示根层级或一个层级，'//'表示从任意层级开始或多个层级,'[i]'可表示索引定位，从 1 开始
@@ -84,7 +84,7 @@ def get_pic_url_xp(url: str, headers: dict):
     return title, url_list
 
 
-def get_img(title: str, url_list: list, headers: dict, path: str):
+def get_img(title: str, url_list: list[str], headers: dict[str, str], path: str):
     # 判断是否出现重名目录
     if not os.path.exists(os.path.join(path, title)):
         os.mkdir(os.path.join(path, title))

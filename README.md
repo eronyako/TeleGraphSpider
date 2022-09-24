@@ -65,8 +65,12 @@ pyinstaller -F --icon=icon.ico TeleGraphSpiderAsyncio.py
 
 ## 输出
 
-若正常运行后将会在当前文件夹创建 telegraph_lib 文件夹。
+正常运行后将会在当前文件夹创建 telegraph_lib 文件夹。
 
-解析的 url 存放在 ./telegraph_lib/pic_urls.json
+解析的 url 存放在 `./telegraph_lib/pic_urls.json`
 
-url 列表文件中每个 url 会按照标题在 telegraph_lib 文件夹中创建文件夹，每个 url 中的图片将被下载到该文件夹中。
+url 列表文件中每个 url 会按照标题在 `telegraph_lib` 文件夹中创建文件夹，每个 url 中的图片将被下载到该文件夹中。
+
+## 使用许可
+
+[MIT](LICENSE) © Eronyako
